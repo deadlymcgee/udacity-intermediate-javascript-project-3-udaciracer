@@ -238,7 +238,8 @@ function renderCountdown(count) {
 function renderRaceStartView(track, racers) {
 	return `
 		<header>
-			<h1>Race: ${track.name}</h1>
+<!--			TODO Re-enable track name-->
+			<h1>Race: </h1>
 		</header>
 		<main id="two-columns">
 			<section id="leaderBoard">
