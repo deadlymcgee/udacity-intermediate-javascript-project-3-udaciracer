@@ -85,7 +85,7 @@ async function handleCreateRace() {
 		const race = await createRace(player_id, track_id);
 
 		// update the store with the race id
-		store.race_id = race.id;
+		store.race_id = race.ID - 1;
 
 		// The race has been created, now start the countdown
 		await runCountdown();
