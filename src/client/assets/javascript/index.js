@@ -297,7 +297,7 @@ function raceProgress(positions) {
 				</td>
 			</tr>
 		`
-	})
+	}).join("");
 
 	return `
 		<main>
