@@ -92,7 +92,7 @@ async function handleCreateRace() {
 
     await startRace(store.race_id);
 
-		// TODO - call the async function runRace
+		await runRace(store.race_id);
 
 	} catch (err) {
 		console.log("Problem with createRace request::", err)
@@ -101,23 +101,25 @@ async function handleCreateRace() {
 
 function runRace(raceID) {
 	return new Promise(resolve => {
-	// TODO - use Javascript's built in setInterval method to get race info every 500ms
-
-	/* 
-		TODO - if the race info status property is "in-progress", update the leaderboard by calling:
-
-		renderAt('#leaderBoard', raceProgress(res.positions))
-	*/
-
-	/* 
-		TODO - if the race info status property is "finished", run the following:
-
-		clearInterval(raceInterval) // to stop the interval from repeating
-		renderAt('#race', resultsView(res.positions)) // to render the results view
-		reslove(res) // resolve the promise
-	*/
+	// get the race info every 500ms
+	const intervalId = setInterval(async () => {
+		const res = await getRace(raceID);
+		switch (res.status) {
+			case "in-progress":
+				// update the leaderboard
+				renderAt('#leaderBoard', raceProgress(res.positions));
+				break
+			case "finished":
+				clearInterval(intervalId);
+				renderAt('#race', resultsView(res.positions));
+				resolve(res);
+				break;
+			default:
+				console.log("Unsupported status::", res.status);
+		}
+	}, 500);
 	})
-	// remember to add error handling for the Promise
+		.catch(err => console.log("Problem with runRace request::", err))
 }
 
 async function runCountdown() {
@@ -362,7 +364,9 @@ function createRace(player_id, track_id) {
 }
 
 function getRace(id) {
-	// GET request to `${SERVER}/api/races/${id}`
+	return fetch( `${SERVER}/api/races/${id}`)
+		.then(res => res.json())
+		.catch(err => console.log("Problem with getRace request::", err))
 }
 
 function startRace(id) {
