@@ -72,6 +72,21 @@ async function delay(ms) {
 }
 // ^ PROVIDED CODE ^ DO NOT REMOVE
 
+/**
+ * @description Handles the asynchronous request allowing re-use of request failure handling
+ * @param {function} func - the callback function
+ * @param {Array} params - the parameters for the callback function
+ * @returns {Object} - response from the callback function
+ */
+async function handleAsyncRequest(func, ...params) {
+
+	const res = await func(...params);
+	if (!res) {
+		throw new Error("Request failed!");
+	}
+	return res;
+}
+
 // This async function controls the flow of the race, add the logic and error handling
 async function handleCreateRace() {
 	// render starting UI
@@ -82,20 +97,20 @@ async function handleCreateRace() {
 	
 	try {
 		//  invoke the API call to create the race, then save the result
-		const race = await createRace(player_id, track_id);
+		const race = await handleAsyncRequest(createRace, [player_id, track_id]);
 
 		// update the store with the race id
 		store.race_id = race.ID - 1;
 
 		// The race has been created, now start the countdown
-		await runCountdown();
+		await handleAsyncRequest(runCountdown);
 
-    await startRace(store.race_id);
+    await handleAsyncRequest(startRace, [store.race_id]);
 
-		await runRace(store.race_id);
+		await handleAsyncRequest(runRace, [store.race_id]);
 
 	} catch (err) {
-		console.log("Problem with createRace request::", err)
+		console.log(err);
 	}
 }
 
@@ -181,7 +196,11 @@ function handleSelectTrack(target) {
 
 function handleAccelerate() {
 	console.log("accelerate button clicked")
-	accelerate(store.race_id);
+	try {
+		handleAsyncRequest(accelerate, [store.race_id]);
+	} catch (err) {
+		console.log(err);
+	}
 }
 
 // HTML VIEWS ------------------------------------------------
