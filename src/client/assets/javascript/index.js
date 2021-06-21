@@ -289,32 +289,17 @@ function renderRaceStartView(track, racers) {
 	`
 }
 
-function resultsView(positions) {
-	positions.sort((a, b) => (a.final_position > b.final_position) ? 1 : -1)
-
-	return `
-		<header>
-			<h1>Race Results</h1>
-		</header>
-		<main>
-			${raceProgress(positions)}
-			<a href="/race">Start a new race</a>
-		</main>
-	`
-}
-
-function raceProgress(positions) {
+function racePositionsView(positions) {
 	let userPlayer = positions.find(e => e.id === parseInt(store.player_id))
 	userPlayer.driver_name += " (you)"
 
-	positions = positions.sort((a, b) => (a.segment > b.segment) ? -1 : 1)
 	let count = 1
 
 	const results = positions.map(p => {
 		return `
 			<tr>
 				<td>
-					<h3>${count++} - ${p.driver_name}</h3>
+					<h3>${count++} - ${p.driver_name})</h3>
 				</td>
 			</tr>
 		`
@@ -326,6 +311,30 @@ function raceProgress(positions) {
 			<section id="leaderBoard">
 				${results}
 			</section>
+		</main>
+	`
+
+}
+function resultsView(positions) {
+	positions.sort((a, b) => (a.final_position > b.final_position) ? 1 : -1)
+
+	return `
+		<header>
+			<h1>Race Results</h1>
+		</header>
+		<main>
+			${racePositionsView(positions)}
+			<a href="/race">Start a new race</a>
+		</main>
+	`
+}
+
+function raceProgress(positions) {
+
+	positions = positions.sort((a, b) => (a.segment > b.segment) ? -1 : 1)
+	return `
+		<main>
+			${racePositionsView(positions)}
 		</main>
 	`
 }
