@@ -5,6 +5,7 @@ var store = {
 	track_id: undefined,
 	player_id: undefined,
 	race_id: undefined,
+	race_length: undefined,
 }
 
 // We need our javascript to wait until the DOM is loaded
@@ -101,7 +102,7 @@ async function handleCreateRace() {
 
 		// update the store with the race id
 		store.race_id = race.ID - 1;
-
+		store.race_length = race.Track.segments.length;
 		// The race has been created, now start the countdown
 		await handleAsyncRequest(runCountdown);
 
@@ -299,7 +300,7 @@ function racePositionsView(positions) {
 		return `
 			<tr>
 				<td>
-					<h3>${count++} - ${p.driver_name})</h3>
+					<h3>${count++} - ${p.driver_name} (${Math.round((p.segment / store.race_length) * 100)}%)</h3>
 				</td>
 			</tr>
 		`
