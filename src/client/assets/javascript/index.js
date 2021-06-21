@@ -137,7 +137,7 @@ async function runCountdown() {
 				} else {
 					// if the countdown is done, clear the interval, resolve the promise, and return
 					clearInterval(intervalId);
-					resolve();
+					resolve("Countdown complete!");
 				}
 			}, 1000)
 		})
@@ -372,7 +372,8 @@ function startRace(id) {
 		method: 'POST',
 		...defaultFetchOpts(),
 	})
-	.catch(err => console.log("Problem with startRace request::", err))
+		.then(res => res.ok)
+		.catch(err => console.log("Problem with startRace request::", err))
 }
 
 function accelerate(id) {
@@ -380,5 +381,6 @@ function accelerate(id) {
 		method: 'POST',
 		...defaultFetchOpts()
 	})
+		.then(res => res.ok)
 		.catch(err => console.log("Problem with accelerate request::", err))
 }
