@@ -1,3 +1,4 @@
+import { getTracks } from "./api.js";
 // PROVIDED CODE BELOW (LINES 1 - 80) DO NOT REMOVE
 
 // The store will hold all information needed globally
@@ -363,11 +364,11 @@ function defaultFetchOpts() {
 	}
 }
 
-function getTracks() {
-	return fetch(`${SERVER}/api/tracks`)
-		.then(res => res.json())
-		.catch(err => console.log("Problem with getTracks request::", err))
-}
+// function getTracks() {
+// 	return fetch(`${SERVER}/api/tracks`)
+// 		.then(res => res.json())
+// 		.catch(err => console.log("Problem with getTracks request::", err))
+// }
 
 function getRacers() {
 	return fetch(`${SERVER}/api/cars`)
