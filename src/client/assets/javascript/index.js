@@ -80,7 +80,7 @@ async function delay(ms) {
  * @param {Array} params - the parameters for the callback function
  * @returns {Object} - response from the callback function
  */
-async function handleAsyncRequest(func, ...params) {
+async function handleAsyncRequest(func, params= []) {
 
 	const res = await func(...params);
 	if (!res) {
