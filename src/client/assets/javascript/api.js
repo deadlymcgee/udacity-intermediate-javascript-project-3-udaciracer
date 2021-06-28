@@ -1,10 +1,15 @@
-const getTracks = function() {
-
+const Api = (function() {
   const SERVER = 'http://localhost:8000'
 
-  return fetch(`${SERVER}/api/tracks`)
-    .then(res => res.json())
-    .catch(err => console.log("Problem with getTracks request::", err))
-}
+  const getTracks = function() {
+    return fetch(`${SERVER}/api/tracks`)
+      .then(res => res.json())
+      .catch(err => console.log("Problem with getTracks request::", err))
+  }
 
-export { getTracks };
+  return {
+    getTracks: getTracks,
+  }
+})();
+
+export default Api;
